@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "shatr poem.config.json",
+  "type": "object",
+  "required": ["title", "author", "domain", "description"],
+  "additionalProperties": true,
+  "properties": {
+    "title": { "type": "string", "description": "Poem title (Arabic). Used as the H1, page title, OG/JSON-LD name." },
+    "shortName": { "type": "string", "description": "Optional short name for the PWA (defaults to title)." },
+    "author": { "type": "string", "description": "Poet's name (Arabic)." },
+    "editor": { "type": "string", "description": "Optional editor/vocaliser name." },
+    "lang": { "type": "string", "default": "ar", "description": "BCP-47 language tag, e.g. \"ar\" or \"ar-MA\"." },
+    "dir": { "type": "string", "enum": ["rtl", "ltr"], "default": "rtl" },
+    "layout": { "type": "string", "enum": ["single", "paged"], "default": "single", "description": "single = one page (a Table of Contents appears for multi-section poems). paged = an index page + one page per ## chapter, with prev/next nav — use this for long works (alfiyyas)." },
+    "domain": { "type": "string", "pattern": "^[^/]+\\.[^/]+$", "description": "Bare custom domain host (no https://), e.g. \"poem.example.com\". Becomes CNAME + canonical URL." },
+    "siteName": { "type": "string", "description": "Optional og:site_name." },
+    "description": { "type": "string", "description": "Meta + OG + JSON-LD description (Arabic)." },
+    "manifestDescription": { "type": "string", "description": "Optional PWA manifest description (defaults to description)." },
+    "keywords": { "type": "array", "items": { "type": "string" }, "description": "JSON-LD keywords." },
+    "about": { "type": "string", "description": "Optional JSON-LD topical 'about' line." },
+    "dates": {
+      "type": "object",
+      "properties": {
+        "created": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "published": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "signatureLine": { "type": "string", "description": "Free-text date/place line shown under the first section's signature." }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "properties": {
+        "themeColor": { "type": "string", "default": "#f5f5f4", "description": "Browser toolbar color (light page default)." },
+        "splashColor": { "type": "string", "default": "#121212", "description": "PWA splash background. Match your icon." }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "description": "Optional links. Each rendered as a card + a scroll button; omit to hide.",
+      "properties": {
+        "soundcloud": { "type": "string", "format": "uri" },
+        "whatsapp": { "description": "true = auto share text from title/author/url; or a custom string.", "oneOf": [{ "type": "boolean" }, { "type": "string" }] },
+        "pdf": { "type": "string", "description": "PDF filename placed in content/ (copied to the site root)." }
+      }
+    },
+    "footer": {
+      "type": "object",
+      "properties": {
+        "credit": { "type": "string", "description": "e.g. \"قرأه وضبطه\"." },
+        "name": { "type": "string" },
+        "facebook": { "type": "string", "format": "uri" },
+        "dateLine": { "type": "string" }
+      }
+    },
+    "analytics": {
+      "type": "object",
+      "properties": { "ga4": { "type": "string", "description": "GA4 measurement id, e.g. G-XXXXXXX. Omit to ship zero analytics." } }
+    },
+    "social": {
+      "type": "object",
+      "properties": { "card": { "type": "string", "description": "1200x630 JPG in content/, used as og:image. If omitted, the 512 icon is used." } }
+    },
+    "labels": { "type": "object", "description": "Optional overrides for Arabic UI strings (سماع، إرسال، PDF، ويب …)." }
+  }
+}

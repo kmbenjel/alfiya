@@ -1,0 +1,23 @@
+# content/poem.txt — write the poem here, ONE SHATR (hemistich) PER LINE.
+# A bayt = two consecutive lines. Blank lines are ignored. Lines starting with a
+# single "#" are comments. A line starting with "##" begins a new section whose
+# label appears as a subtitle (like a تكملة / تتمة). Use full, correct tashkeel.
+#
+# Demo: a public-domain piece by al-Imām al-Shāfiʿī (d. 204 AH). Replace it.
+
+دَعِ الأَيَّامَ تَفْعَلُ مَا تَشَاءُ
+وَطِبْ نَفْسًا إِذَا حَكَمَ الْقَضَاءُ
+وَلَا تَجْزَعْ لِحَادِثَةِ اللَّيَالِي
+فَمَا لِحَوَادِثِ الدُّنْيَا بَقَاءُ
+وَكُنْ رَجُلًا عَلَى الأَهْوَالِ جَلْدًا
+وَشِيمَتُكَ السَّمَاحَةُ وَالْوَفَاءُ
+وَإِنْ كَثُرَتْ عُيُوبُكَ فِي الْبَرَايَا
+وَسَرَّكَ أَنْ يَكُونَ لَهَا غِطَاءُ
+تَسَتَّرْ بِالسَّخَاءِ فَكُلُّ عَيْبٍ
+يُغَطِّيهِ كَمَا قِيلَ السَّخَاءُ
+
+## تتمة
+وَلَا حُزْنٌ يَدُومُ وَلَا سُرُورٌ
+وَلَا بُؤْسٌ عَلَيْكَ وَلَا رَخَاءُ
+إِذَا مَا كُنْتَ ذَا قَلْبٍ قَنُوعٍ
+فَأَنْتَ وَمَالِكُ الدُّنْيَا سَوَاءُ

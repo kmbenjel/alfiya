@@ -1,0 +1,20 @@
+{
+  "name": "{{TITLE}}",
+  "short_name": "{{SHORT_NAME}}",
+  "description": "{{MANIFEST_DESC}}",
+  "lang": "{{LANG}}",
+  "dir": "{{DIR}}",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "{{SPLASH_COLOR}}",
+  "theme_color": "{{THEME_COLOR}}",
+  "icons": [
+    { "src": "/assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "categories": ["books", "education"],
+  "orientation": "any",
+  "display_override": ["standalone", "minimal-ui"]
+}

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>شطر · studio</title>
+<meta name="robots" content="noindex">
+<style>
+@font-face{font-family:'Amiri';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/amiri-regular-arabic.woff2') format('woff2')}
+:root{--bg:#f5f5f4;--fg:#333;--title:#111;--accent:#6b6b6b;--card:#fff;--line:rgba(0,0,0,.08)}
+html.dark{--bg:#121212;--fg:#d0d0d0;--title:#fff;--accent:#888;--card:#1c1c1e;--line:rgba(255,255,255,.1)}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Amiri',serif;background:var(--bg);color:var(--fg);transition:background .3s,color .3s}
+header{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 1.2rem;border-bottom:1px solid var(--line)}
+header h1{font-size:1.3rem;margin:0;color:var(--title);font-weight:400}
+header .sub{color:var(--accent);font-size:.85rem}
+button{font-family:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:.5rem;padding:.5rem .9rem;font-size:.95rem;transition:background .2s}
+button:hover{background:var(--accent);color:var(--bg)}
+.app{display:grid;grid-template-columns:1fr 1fr;gap:0;height:calc(100vh - 58px)}
+@media (max-width:820px){.app{grid-template-columns:1fr;height:auto}}
+.editor,.preview{overflow:auto;padding:1.2rem}
+.editor{border-inline-end:1px solid var(--line);display:flex;flex-direction:column;gap:.7rem}
+.field{display:flex;flex-direction:column;gap:.25rem}
+.field label{font-size:.8rem;color:var(--accent)}
+.field input,.field select,textarea{font-family:'Amiri',serif;font-size:1.05rem;padding:.5rem .7rem;border:1px solid var(--line);border-radius:.5rem;background:var(--card);color:var(--fg);width:100%}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+textarea{min-height:38vh;line-height:2;resize:vertical;white-space:pre}
+.actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.3rem}
+#messages{font-size:.85rem;line-height:1.7}
+#messages .err{color:#c0392b}#messages .warn{color:#b8860b}#messages .ok{color:#1a7f37}
+html.dark #messages .err{color:#ff7b72}html.dark #messages .warn{color:#e3b341}html.dark #messages .ok{color:#56d364}
+.preview{background:var(--bg)}
+.preview .title{font-size:1.9rem;font-weight:400;color:var(--title);text-align:center;margin:.5rem 0 1.5rem;position:relative;padding-bottom:1rem}
+.preview .title::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:80px;height:1px;background:var(--accent);opacity:.5}
+.preview .title .subtitle{display:block;font-size:1rem;color:var(--accent);margin-top:.4rem}
+.poem-section{counter-reset:bayt-num;width:fit-content;max-width:100%;margin:0 auto 1.5rem}
+.bayt{counter-increment:bayt-num;display:flex;flex-direction:column;align-items:center;gap:.31rem;position:relative;margin-bottom:1.2rem;padding:.3rem .75rem}
+.bayt::before{content:counter(bayt-num);position:absolute;right:-1.1rem;top:50%;transform:translateY(-50%);font-size:.65rem;color:var(--accent);opacity:.6}
+.verse{font-size:1.4rem;line-height:1.8;white-space:nowrap;text-align:center}
+.empty{color:var(--accent);text-align:center;margin-top:20vh}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>شطر · studio</h1><div class="sub">اكتب القصيدة وعايِن الضبط مباشرةً — ثم نزِّل الملفّين</div></div>
+  <button id="dark" type="button">🌓</button>
+</header>
+<div class="app">
+  <section class="editor">
+    <div class="field"><label>العنوان · title</label><input id="f-title" value="دَعِ الأَيَّامَ"></div>
+    <div class="row">
+      <div class="field"><label>الشاعر · author</label><input id="f-author" value="الإمام الشافعي"></div>
+      <div class="field"><label>النطاق · domain</label><input id="f-domain" placeholder="poem.example.com" value="poem.example.com"></div>
+    </div>
+    <div class="field"><label>الوصف · description</label><input id="f-desc" value="قصيدة في الرضا بالقضاء."></div>
+    <div class="row">
+      <div class="field"><label>التخطيط · layout</label><select id="f-layout"><option value="single">single — صفحة واحدة</option><option value="paged">paged — صفحة لكل باب</option></select></div>
+      <div class="field"><label>كلمات مفتاحية (بفواصل)</label><input id="f-keywords" value="الشافعي, حكمة"></div>
+    </div>
+    <div class="field"><label>القصيدة — شطرٌ في كل سطر · `##` لبدء بابٍ جديد</label>
+      <textarea id="poem" spellcheck="false">دَعِ الأَيَّامَ تَفْعَلُ مَا تَشَاءُ
+وَطِبْ نَفْسًا إِذَا حَكَمَ الْقَضَاءُ
+وَلَا تَجْزَعْ لِحَادِثَةِ اللَّيَالِي
+فَمَا لِحَوَادِثِ الدُّنْيَا بَقَاءُ
+
+## تتمة
+وَلَا حُزْنٌ يَدُومُ وَلَا سُرُورٌ
+وَلَا بُؤْسٌ عَلَيْكَ وَلَا رَخَاءُ</textarea>
+    </div>
+    <div id="messages"></div>
+    <div class="actions">
+      <button id="dl-poem" type="button">⬇ poem.txt</button>
+      <button id="dl-config" type="button">⬇ poem.config.json</button>
+      <button id="cp-poem" type="button">⧉ نسخ poem.txt</button>
+      <button id="cp-config" type="button">⧉ نسخ poem.config.json</button>
+    </div>
+  </section>
+  <section class="preview"><div id="out"><div class="empty">المعاينة تظهر هنا…</div></div></section>
+</div>
+
+<script type="module">
+// ── parser (mirrors scripts/validate.mjs) ──────────────────────────────────────
+function parsePoem(text){
+  const errors=[], lines=text.split(/\r?\n/), sections=[]; let cur=null;
+  const start=(l)=>{cur={label:l||null,shatrs:[]};sections.push(cur)};
+  lines.forEach((raw,i)=>{const line=raw.trim();
+    if(line===''||/^#(?!#)/.test(line))return;
+    if(line.startsWith('##')){start(line.replace(/^##\s*/,'').trim());return}
+    if(!cur)start(null); cur.shatrs.push({text:line,line:i+1});});
+  const out=sections.map((s,idx)=>{const bayts=[];
+    for(let k=0;k+1<s.shatrs.length;k+=2)bayts.push([s.shatrs[k],s.shatrs[k+1]]);
+    if(s.shatrs.length%2){const last=s.shatrs[s.shatrs.length-1];
+      errors.push(`الباب ${idx+1}: شطرٌ بلا قرين في السطر ${last.line} — كل بيت شطران.`)}
+    return {label:s.label,bayts}});
+  return {sections:out,errors};
+}
+const HARAKAT=/[ً-ْٰـ]/g, LETTER=/[ء-ي]/g, LONG=/[اأإآويءى]/;
+function tashkeelWarnings(sections){const w=[];for(const s of sections)for(const b of s.bayts)for(const sh of b){
+  const letters=(sh.text.match(LETTER)||[]).filter(c=>!LONG.test(c)).length;
+  const marks=(sh.text.match(HARAKAT)||[]).length;
+  if(letters>=3&&marks<letters*0.4)w.push(`السطر ${sh.line} قد يكون ناقص الضبط: «${sh.text}»`)}return w}
+
+// ── kashida core (mirrors engine/app.js) ────────────────────────────────────────
+const JOIN=/[بتثجحخسشصضطظعغفقكلمنهيئـ][ً-ٰٟ]*/g, TT='ـ', DIA=/[ً-ٰٟـ]/;
+function insideLa(o,mi,p){if(o[mi]!=='ل')return false;let i=p;while(i<o.length&&DIA.test(o[i]))i++;return i<o.length&&['ا','أ','إ','آ'].includes(o[i])}
+function positions(o){const P=[];JOIN.lastIndex=0;let m;while((m=JOIN.exec(o))){const p=m.index+m[0].length;
+  if(p>=o.length)continue; if(!/[بتثجحخدذرزسشصضطظعغفقكلمنهويىئؤةـ]/.test(o[p]))continue; if(insideLa(o,m.index,p))continue;
+  const sb=o.lastIndexOf(' ',m.index),sw=sb===-1?0:sb+1; let ew=o.indexOf(' ',p); if(ew===-1)ew=o.length;
+  const cw=o.slice(sw,ew).replace(/[ً-ٰٟـ]/g,'');
+  if(/^(و|ف)?(ب|ل)?(ال|ل)لهم?$/.test(cw))continue;
+  let el=cw.length; if(cw[0]==='و'||cw[0]==='ف')el--; if(el<3)continue; P.push(p)}
+  const u=[];let ls=-2;for(const p of P){const cs=o.lastIndexOf(' ',p-1);if(cs>ls){u.push(p);ls=cs}}return u}
+function insert(o,pos,R){if(R<=0||!pos.length)return o;const c=new Array(pos.length).fill(0);
+  for(let r=0;r<R;r++)c[r%pos.length]++;let out='',pr=0;for(let i=0;i<pos.length;i++){out+=o.slice(pr,pos[i])+TT.repeat(c[i]);pr=pos[i]}return out+o.slice(pr)}
+function justify(root){
+  const bayts=root.querySelectorAll('.bayt'); if(!bayts.length)return;
+  const cv=document.createElement('canvas'),cx=cv.getContext('2d'); cx.font='normal 22.4px Amiri,serif';
+  const tw=cx.measureText(TT.repeat(50)).width/50||5;
+  bayts.forEach(by=>{const vs=by.querySelectorAll('.verse'); if(vs.length<2)return;
+    const o1=vs[0].dataset.o,o2=vs[1].dataset.o,w1=cx.measureText(o1).width,w2=cx.measureText(o2).width;
+    let A,S,oS,tgt,nat; if(w1>=w2){A=vs[0];S=vs[1];oS=o2;tgt=w1;nat=w2}else{A=vs[1];S=vs[0];oS=o1;tgt=w2;nat=w1}
+    A.textContent=A.dataset.o; const pos=positions(oS),diff=tgt-nat;
+    if(diff<.5||!pos.length){S.textContent=oS;S.style.wordSpacing='';return}
+    let lo=0,hi=Math.max(1,Math.min(30,Math.round(diff/tw))),bR=0,bd=1/0,bw=nat;
+    while(lo<=hi){const mid=(lo+hi)>>1,w=cx.measureText(insert(oS,pos,mid)).width,d=Math.abs(w-tgt);
+      if(d<bd){bd=d;bR=mid;bw=w}if(w<tgt)lo=mid+1;else hi=mid-1}
+    const txt=insert(oS,pos,bR),sp=(txt.match(/ /g)||[]).length;
+    S.textContent=txt; S.style.wordSpacing=sp>0?((tgt-bw)/sp)+'px':''})}
+
+// ── render + generate ────────────────────────────────────────────────────────────
+const $=id=>document.getElementById(id);
+function render(){
+  const {sections,errors}=parsePoem($('poem').value);
+  const warns=tashkeelWarnings(sections);
+  const msg=[]; errors.forEach(e=>msg.push(`<div class="err">✗ ${e}</div>`));
+  warns.slice(0,8).forEach(w=>msg.push(`<div class="warn">⚠ ${w}</div>`));
+  if(warns.length>8)msg.push(`<div class="warn">⚠ …و${warns.length-8} غيرها</div>`);
+  if(!errors.length)msg.push(`<div class="ok">✓ ${sections.length} باب، ${sections.reduce((n,s)=>n+s.bayts.length,0)} بيت${warns.length?` (${warns.length} تنبيه ضبط)`:''}</div>`);
+  $('messages').innerHTML=msg.join('');
+  const out=$('out'); out.innerHTML='';
+  if(!sections.some(s=>s.bayts.length)){out.innerHTML='<div class="empty">اكتب بيتًا (شطرين) لتظهر المعاينة…</div>';return}
+  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  sections.forEach((s,idx)=>{
+    const sec=document.createElement('div');sec.className='poem-section';
+    const h=document.createElement(idx===0?'h1':'h2');h.className='title';
+    h.innerHTML=idx===0?esc($('f-title').value):`${esc($('f-title').value)}<span class="subtitle">${esc(s.label||'')}</span>`;
+    sec.appendChild(h);
+    s.bayts.forEach(b=>{const by=document.createElement('div');by.className='bayt';
+      b.forEach(sh=>{const v=document.createElement('div');v.className='verse';v.textContent=sh.text;v.dataset.o=sh.text;by.appendChild(v)});
+      sec.appendChild(by)});
+    out.appendChild(sec)});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>justify(out)); else justify(out);
+}
+function configObj(){
+  const kw=$('f-keywords').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const c={$schema:'../schema/poem.config.schema.json',title:$('f-title').value,author:$('f-author').value,
+    lang:'ar',dir:'rtl',domain:$('f-domain').value,description:$('f-desc').value};
+  if($('f-layout').value==='paged')c.layout='paged';
+  if(kw.length)c.keywords=kw;
+  c.theme={themeColor:'#f5f5f4',splashColor:'#121212'}; c.resources={whatsapp:true};
+  c.footer={credit:'إعداد',name:$('f-author').value};
+  return c;
+}
+function download(name,text){const b=new Blob([text],{type:'text/plain;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;a.click();URL.revokeObjectURL(u)}
+async function copy(text,btn){try{await navigator.clipboard.writeText(text);const t=btn.textContent;btn.textContent='✓ نُسخ';setTimeout(()=>btn.textContent=t,1200)}catch(e){alert('انسخ يدويًّا:\n\n'+text)}}
+
+['poem','f-title','f-author','f-desc','f-layout','f-keywords','f-domain'].forEach(id=>$(id).addEventListener('input',render));
+$('dl-poem').onclick=()=>download('poem.txt',$('poem').value+'\n');
+$('dl-config').onclick=()=>download('poem.config.json',JSON.stringify(configObj(),null,2)+'\n');
+$('cp-poem').onclick=e=>copy($('poem').value+'\n',e.target);
+$('cp-config').onclick=e=>copy(JSON.stringify(configObj(),null,2)+'\n',e.target);
+$('dark').onclick=()=>document.documentElement.classList.toggle('dark');
+if(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.classList.add('dark');
+render();
+</script>
+</body>
+</html>
